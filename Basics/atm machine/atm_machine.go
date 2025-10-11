@@ -6,6 +6,7 @@ import (
 
 func main() {
 	fmt.Println("Welcome to ATM machine!")
+	var balance float64 = 1000
 
 	for {
 		fmt.Println()
@@ -17,17 +18,16 @@ func main() {
 		fmt.Println()
 
 		var choice int
-		var balance float64 = 1000
-
 		fmt.Print("Enter your choice: ")
 		fmt.Scan(&choice)
 
 		fmt.Println("You have chosen: ", choice)
 		fmt.Println()
 
-		if choice == 1 {
+		switch choice {
+		case 1:
 			fmt.Println("Your balance is: ", balance)
-		} else if choice == 2 {
+		case 2:
 			fmt.Print("Enter amount to deposit: ")
 			var amount float64
 			fmt.Scan(&amount)
@@ -39,7 +39,7 @@ func main() {
 
 			balance += amount
 			fmt.Println("Your new balance is: ", balance)
-		} else if choice == 3 {
+		case 3:
 			fmt.Print("Enter amount to withdraw: ")
 			var amount float64
 			fmt.Scan(&amount)
@@ -56,11 +56,10 @@ func main() {
 
 			balance -= amount
 			fmt.Println("Your new balance is: ", balance)
-		} else {
+		default:
 			fmt.Println("Goodbye!")
-			break
+			fmt.Println("Thank you for using ATM machine!")
+			return
 		}
 	}
-
-	fmt.Println("Thank you for using ATM machine!")
 }
