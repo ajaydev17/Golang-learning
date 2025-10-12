@@ -2,11 +2,27 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 )
+
+const accountBalanceFileName = "balance.txt"
+
+func readBalanceFromFile() float64 {
+	data, _ := os.ReadFile(accountBalanceFileName)
+	balanceText := string(data)
+	balance, _ := strconv.ParseFloat(balanceText, 64)
+	return balance
+}
+
+func writeBalanceToFile(balance float64) {
+	balanceText := fmt.Sprintf("%.2f", balance)
+	os.WriteFile(accountBalanceFileName, []byte(balanceText), 0644)
+}
 
 func main() {
 	fmt.Println("Welcome to ATM machine!")
-	var balance float64 = 1000
+	var balance float64 = readBalanceFromFile()
 
 	for {
 		fmt.Println()
@@ -38,6 +54,8 @@ func main() {
 			}
 
 			balance += amount
+			writeBalanceToFile(balance)
+
 			fmt.Println("Your new balance is: ", balance)
 		case 3:
 			fmt.Print("Enter amount to withdraw: ")
@@ -55,6 +73,8 @@ func main() {
 			}
 
 			balance -= amount
+			writeBalanceToFile(balance)
+
 			fmt.Println("Your new balance is: ", balance)
 		default:
 			fmt.Println("Goodbye!")
