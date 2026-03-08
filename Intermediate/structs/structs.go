@@ -27,10 +27,19 @@ func main() {
 	}
 
 	appUser.outputUserData()
+	appUser.clearUserData()
+	appUser.outputUserData()
 }
 
 func (user User) outputUserData() {
 	fmt.Println(user.firstName, user.lastName, user.birthDate)
+}
+
+// clearUserData clears the user data, need to pass a pointer to the User struct otherwise copy of the struct will be passed
+func (user *User) clearUserData() {
+	user.firstName = ""
+	user.lastName = ""
+	user.birthDate = ""
 }
 
 func getUserData(promptText string) string {
