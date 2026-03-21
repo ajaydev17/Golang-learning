@@ -17,14 +17,9 @@ func main() {
 	userLastName := getUserData("Enter your last name: ")
 	userBirthDate := getUserData("Enter your birth date (YYYY-MM-DD): ")
 
-	var appUser User
+	var appUser *User
 
-	appUser = User{
-		firstName: userFirstName,
-		lastName:  userLastName,
-		birthDate: userBirthDate,
-		createdAt: time.Now(),
-	}
+	appUser = newUser(userFirstName, userLastName, userBirthDate)
 
 	appUser.outputUserData()
 	appUser.clearUserData()
@@ -40,6 +35,15 @@ func (user *User) clearUserData() {
 	user.firstName = ""
 	user.lastName = ""
 	user.birthDate = ""
+}
+
+func newUser(firstName string, lastName string, birthDate string) *User {
+	return &User{
+		firstName: firstName,
+		lastName:  lastName,
+		birthDate: birthDate,
+		createdAt: time.Now(),
+	}
 }
 
 func getUserData(promptText string) string {
