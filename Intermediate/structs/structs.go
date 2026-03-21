@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"time"
 )
@@ -19,7 +20,12 @@ func main() {
 
 	var appUser *User
 
-	appUser = newUser(userFirstName, userLastName, userBirthDate)
+	appUser, err := newUser(userFirstName, userLastName, userBirthDate)
+
+	if err != nil {
+		fmt.Println("Error creating user: ", err)
+		return
+	}
 
 	appUser.outputUserData()
 	appUser.clearUserData()
@@ -37,13 +43,19 @@ func (user *User) clearUserData() {
 	user.birthDate = ""
 }
 
-func newUser(firstName string, lastName string, birthDate string) *User {
+func newUser(firstName string, lastName string, birthDate string) (*User, error) {
+
+	if firstName == "" || lastName == "" || birthDate == "" {
+		fmt.Println("Invalid user data!")
+		return nil, errors.New("Invalid user data!")
+	}
+
 	return &User{
 		firstName: firstName,
 		lastName:  lastName,
 		birthDate: birthDate,
 		createdAt: time.Now(),
-	}
+	}, nil
 }
 
 func getUserData(promptText string) string {
