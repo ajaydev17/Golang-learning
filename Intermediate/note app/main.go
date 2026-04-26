@@ -19,6 +19,14 @@ func main() {
 	}
 	fmt.Println("Note created successfully!")
 	fmt.Println(note.Display())
+
+	err = note.Save()
+	if err != nil {
+		fmt.Println("Failed to save note:", err)
+		return
+	}
+
+	fmt.Println("Note saved successfully!")
 }
 
 // getUserInput prompts the user for input and returns the entered string.
