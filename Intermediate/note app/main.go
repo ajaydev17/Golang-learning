@@ -1,27 +1,38 @@
 package main
 
 import (
+	"bufio"
 	"example/note-app/note"
 	"fmt"
+	"os"
+	"strings"
 )
 
 // This is a simple note-taking application in Go. It allows users to create, view, and delete notes.
 func main() {
 	title, content := getNoteData()
 
-	_, err := note.New(title, content)
+	note, err := note.New(title, content)
 	if err != nil {
 		fmt.Println("Failed to create note:", err)
 		return
 	}
 	fmt.Println("Note created successfully!")
+	fmt.Println(note.Display())
 }
 
 // getUserInput prompts the user for input and returns the entered string.
 func getUserInput(prompt string) string {
-	fmt.Print(prompt)
-	var input string
-	fmt.Scanln(&input)
+	fmt.Printf("%v ", prompt)
+
+	reader := bufio.NewReader(os.Stdin)
+	input, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Println("Error reading input:", err)
+		return ""
+	}
+	input = strings.TrimSuffix(input, "\n")
+	input = strings.TrimSuffix(input, "\r") // Handle Windows line endings
 	return input
 }
 
