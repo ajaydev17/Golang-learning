@@ -15,8 +15,8 @@ type Note struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-func (n *Note) Display() string {
-	return fmt.Sprintf("Title: %s\nContent: %s\nCreated At: %s", n.Title, n.Content, n.CreatedAt.Format("2006-01-02 15:04:05"))
+func (n *Note) Display() {
+	fmt.Printf("Title: %s\nContent: %s\nCreated At: %s\n", n.Title, n.Content, n.CreatedAt.Format("2006-01-02 15:04:05"))
 }
 
 func (n *Note) Save() error {

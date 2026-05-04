@@ -3,24 +3,56 @@ package main
 import (
 	"bufio"
 	"example/note-app/note"
+	"example/note-app/todo"
 	"fmt"
 	"os"
 	"strings"
 )
 
+// interface for note management
+type saver interface {
+	Save() error
+}
+
+type displayer interface {
+	Display()
+}
+
+type outputable interface {
+	saver
+	displayer
+}
+
 // This is a simple note-taking application in Go. It allows users to create, view, and delete notes.
 func main() {
 	title, content := getNoteData()
+	todoText := getTodoData()
+
+	todoItem, err := todo.New(todoText)
+	if err != nil {
+		fmt.Println("Failed to create todo item:", err)
+		return
+	}
 
 	note, err := note.New(title, content)
 	if err != nil {
 		fmt.Println("Failed to create note:", err)
 		return
 	}
-	fmt.Println("Note created successfully!")
-	fmt.Println(note.Display())
 
-	err = note.Save()
+	fmt.Println("Todo item created successfully!")
+
+	err = outputData(todoItem)
+	if err != nil {
+		fmt.Println("Failed to save todo item:", err)
+		return
+	}
+
+	fmt.Println("Todo item saved successfully!")
+
+	fmt.Println("Note created successfully!")
+
+	err = outputData(note)
 	if err != nil {
 		fmt.Println("Failed to save note:", err)
 		return
@@ -42,6 +74,26 @@ func getUserInput(prompt string) string {
 	input = strings.TrimSuffix(input, "\n")
 	input = strings.TrimSuffix(input, "\r") // Handle Windows line endings
 	return input
+}
+
+func outputData(d outputable) error {
+	d.Display()
+	return saveData(d)
+}
+
+func saveData(s saver) error {
+	err := s.Save()
+
+	if err != nil {
+		fmt.Println("Failed to save data:", err)
+		return err
+	}
+	fmt.Println("Data saved successfully!")
+	return nil
+}
+
+func getTodoData() string {
+	return getUserInput("Enter the todo item: ")
 }
 
 func getNoteData() (string, string) {
