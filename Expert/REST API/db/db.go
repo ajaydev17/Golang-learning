@@ -3,7 +3,7 @@ package db
 import (
 	"database/sql"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 var DB *sql.DB
@@ -11,7 +11,7 @@ var DB *sql.DB
 func InitDB() {
 	var err error
 
-	DB, err = sql.Open("sqlite3", "api.db")
+	DB, err = sql.Open("sqlite", "api.db")
 	if err != nil {
 		panic("Failed to connect to database: " + err.Error())
 	}
@@ -29,7 +29,7 @@ func createTables() {
 		name TEXT NOT NULL,
 		description TEXT NOT NULL,
 		location TEXT NOT NULL,
-	 	date_time DATETIME NOT NULL
+	 	date_time DATETIME NOT NULL,
 		user_id INTEGER
 	);
 `
