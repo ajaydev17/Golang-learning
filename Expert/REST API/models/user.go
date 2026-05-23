@@ -41,7 +41,7 @@ func (u *User) Save() error {
 }
 
 func (u *User) ValidateCredentials() (bool, error) {
-	query := `SELECT email, password FROM users WHERE email = ?`
+	query := `SELECT id, email, password FROM users WHERE email = ?`
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {
 		return false, err
@@ -49,7 +49,7 @@ func (u *User) ValidateCredentials() (bool, error) {
 	defer stmt.Close()
 
 	var storedUser User
-	err = stmt.QueryRow(u.Email).Scan(&storedUser.Email, &storedUser.Password)
+	err = stmt.QueryRow(u.Email).Scan(&storedUser.ID, &storedUser.Email, &storedUser.Password)
 	if err != nil {
 		return false, err
 	}
@@ -59,5 +59,6 @@ func (u *User) ValidateCredentials() (bool, error) {
 		return false, err
 	}
 
+	u.ID = storedUser.ID
 	return isMatch, nil
 }

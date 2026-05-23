@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"example.com/rest-api/models"
+	"example.com/rest-api/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -41,5 +42,11 @@ func loginUser(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "Login successful"})
+	token, err := utils.GenerateJWT(user.ID, user.Email)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate JWT"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "Login successful", "token": token})
 }
