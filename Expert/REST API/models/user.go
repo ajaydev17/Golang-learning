@@ -59,6 +59,6 @@ func (u *User) ValidateCredentials() (bool, error) {
 		return false, err
 	}
 
-	u.ID = storedUser.ID
+	u.ID = int64(storedUser.ID)
 	return isMatch, nil
 }

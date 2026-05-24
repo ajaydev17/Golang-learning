@@ -39,8 +39,8 @@ func createEvent(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "Could not parse event data" + err.Error()})
 		return
 	}
-	event.ID = 1
-	event.UserID = 1
+
+	event.UserID = context.GetInt64("userId")
 
 	err := event.Save()
 	if err != nil {
@@ -70,7 +70,7 @@ func updateEvent(context *gin.Context) {
 		return
 	}
 
-	updatedEvent.ID = id
+	updatedEvent.ID = int64(id)
 
 	err = updatedEvent.Update()
 	if err != nil {
